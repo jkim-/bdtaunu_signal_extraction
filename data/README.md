@@ -1,7 +1,7 @@
 Data download scripts
 ---
 
-+ `download_kde_trainig_data.py`: Downloads the data from the table `candidate_optimized_events_scores_generic_t` of database `bdtaunuhad_lite` into a csv file, which represent the generic MC. The following are basic instructions for use, use `python download_kde_trainig_data -h` to see the full set of available parameters. 
++ `download_kde_trainig_data.py`: Downloads the data of a specified event type from the table `candidate_optimized_events_scores_generic_t` of database `bdtaunuhad_lite` into a csv file, which represent the generic MC. The following are basic instructions for use, use `python download_kde_trainig_data -h` to see the full set of available parameters. 
 
   Input (required): event type index. 
 
@@ -28,3 +28,5 @@ Data download scripts
     + 3: 0.55
     + 4: 0.14
     + 5: 0.14
+
++ `download_test_data.py`: Downloads the test data from the table `candidate_optimized_events_scores_generic_t` of database `bdtaunuhad_lite` into a csv file, which represent the generic MC. This is the default simluated sample that adjusted to represent the proportions and normalizations of the real data as closely as possible. 
