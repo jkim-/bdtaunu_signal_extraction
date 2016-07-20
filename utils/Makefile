@@ -5,6 +5,11 @@ SRCS = $(wildcard *.cc *.cpp)
 LIBDIR = lib
 LIBNAME = libutils.so
 
+BOOST_ROOT = /usr/local/boost_1_59_0
+BOOST_LIBS = $(BOOST_ROOT)/stage/lib
+
+INCFLAGS = -I$(BOOST_ROOT)
+
 CXX := g++
 CXXFLAGS = -Wall -Werror -fPIC -pedantic -pthread -std=c++11 -O2
 
@@ -25,7 +30,7 @@ lib : $(addprefix $(LIBDIR)/, $(OBJECTS))
 
 $(LIBDIR)/%.o : %.cpp
 $(LIBDIR)/%.o : %.cpp $(DEPDIR)/%.d
-	$(CXX) $(DEPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(DEPFLAGS) $(CXXFLAGS) $(INCFLAGS) -c $< -o $@
 	$(POSTCOMPILE)
 
 $(DEPDIR)/%.d: ;
