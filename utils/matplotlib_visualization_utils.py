@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
 
+hastie_colors = [ '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#CC79A7', '#D55E00', '#0072B2' ]
+
 def plot_data1d(data1d_fname, ax=None, xlim=None, linestyle='-', marker=None,
                 title=None, xlabel=None, axis_fontsize=20, tick_labelsize=16, 
                 orientation='vertical'):
@@ -239,3 +241,50 @@ def plot_kde2d_summary(
         fig.suptitle(title, fontsize=20)
     
     return fig, ax_c, ax_x, ax_y
+
+
+# mainly for stacking marginal densities
+def plot_densities(input_arr, 
+                   stacked=False, prop=None,
+                   lw=2,
+                   ax=None, axis_fontsize=20, tick_labelsize=16,
+                   xlabel=None, ylabel=None, title=None,
+                   colors=None):
+    
+    if ax is None: ax = plt.gca()
+        
+    arr = np.copy(input_arr)
+    x, y = arr[:,0], arr[:,1:]
+    n_components = y.shape[1]
+    
+    if colors is None:
+        colors = hastie_colors
+      
+    if prop is None:
+        prop = [ 1.0 ] * n_components
+        
+    if stacked:
+        for i in range(5):
+            y[:,i] = y[:,i]*prop[i]
+        y = np.cumsum(y, axis=1)
+        
+    for i in range(n_components):
+        ax.plot(x, y[:,i], color=colors[i], lw=lw)
+        
+    # customize axis labels
+    ax.tick_params(axis='both', which='major', labelsize=tick_labelsize)
+    if title:
+        ax.set_title(title, fontsize=axis_fontsize)
+
+    if xlabel:
+        ax.set_xlabel(xlabel, fontsize=axis_fontsize)
+    else:
+        ax.set_xlabel(r'$X_1$', fontsize=axis_fontsize)
+        
+    if ylabel:
+        ax.set_ylabel(xlabel, fontsize=axis_fontsize)
+    else:
+        if stacked:
+            ax.set_ylabel(r'stacked density', fontsize=axis_fontsize)
+        else:
+            ax.set_ylabel(r'density', fontsize=axis_fontsize)

@@ -1,8 +1,10 @@
-BINARIES = visualize_component_densities
+BINARIES = visualize_marginal_densities visualize_component_densities
 
 OBJECTS = 
 
 SRCS = $(wildcard *.cc *.cpp)
+
+SYMLINKS = data utils
 
 CUDA_ROOT = /usr/local/cuda-7.5
 CUDA_LIBS = $(CUDA_ROOT)/lib64
@@ -39,12 +41,18 @@ NVCCFLAGS = -std=c++11 -O2 -arch=sm_35 -x cu
 NVCCMAKEDEP = @$(NVCC) -M -MT $@ $(NVCCFLAGS) $(INCFLAGS) $< -o\
 							$(patsubst $(BUILDDIR)/%.o, $(DEPDIR)/%.d, $@)
 
+all : $(BINARIES) $(SYMLINKS)
 
-all : $(BINARIES)
+data : 
 	ln -s $(SIGNAL_EXTRACTION_ROOT)/data data
+
+utils :
 	ln -s $(SIGNAL_EXTRACTION_ROOT)/utils utils
 
 visualize_component_densities : $(addprefix $(BUILDDIR)/, visualize_component_densities.o $(OBJECTS))
+	$(CXX) $^ $(LDFLAGS) -o $@
+
+visualize_marginal_densities : $(addprefix $(BUILDDIR)/, visualize_marginal_densities.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 $(BUILDDIR)/%.o : %.cpp

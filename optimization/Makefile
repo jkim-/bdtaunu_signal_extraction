@@ -4,6 +4,8 @@ OBJECTS =
 
 SRCS = $(wildcard *.cc *.cpp)
 
+SYMLINKS = data
+
 CUDA_ROOT = /usr/local/cuda-7.5
 CUDA_LIBS = $(CUDA_ROOT)/lib64
 
@@ -40,8 +42,10 @@ NVCCMAKEDEP = @$(NVCC) -M -MT $@ $(NVCCFLAGS) $(INCFLAGS) $< -o\
 							$(patsubst $(BUILDDIR)/%.o, $(DEPDIR)/%.d, $@)
 
 
-all : $(BINARIES)
-	ln -s ../data data
+all : $(BINARIES) $(SYMLINKS)
+
+data : 
+	ln -s $(SIGNAL_EXTRACTION_ROOT)/data data
 
 precompute_component_densities : $(addprefix $(BUILDDIR)/, precompute_component_densities.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
