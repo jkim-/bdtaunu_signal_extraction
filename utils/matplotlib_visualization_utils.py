@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import iopro 
 from matplotlib.ticker import NullFormatter
 
 def plot_data1d(data1d_fname, ax=None, xlim=None, linestyle='-', marker=None,
@@ -225,7 +224,7 @@ def plot_kde2d_summary(
     plot_data1d(kde1d_y_fname, ax=ax_y, xlabel=' ', orientation='horizontal')
     
     # draw marginal histograms
-    arr = iopro.genfromtxt(data2d_fname)
+    arr = np.genfromtxt(data2d_fname)
     plot_data1d_histogram(arr[:,0], weights=arr[:,2], bins=data1d_x_bins, 
                           normed=True, ax=ax_x, xlabel=' ');
     plot_data1d_histogram(arr[:,1], weights=arr[:,2], bins=data1d_y_bins, 

@@ -1,4 +1,4 @@
-BINARIES = precompute_component_densities
+BINARIES = visualize_component_densities
 
 OBJECTS = 
 
@@ -41,9 +41,10 @@ NVCCMAKEDEP = @$(NVCC) -M -MT $@ $(NVCCFLAGS) $(INCFLAGS) $< -o\
 
 
 all : $(BINARIES)
-	ln -s ../data data
+	ln -s $(SIGNAL_EXTRACTION_ROOT)/data data
+	ln -s $(SIGNAL_EXTRACTION_ROOT)/utils utils
 
-precompute_component_densities : $(addprefix $(BUILDDIR)/, precompute_component_densities.o $(OBJECTS))
+visualize_component_densities : $(addprefix $(BUILDDIR)/, visualize_component_densities.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 $(BUILDDIR)/%.o : %.cpp
@@ -63,7 +64,7 @@ $(DEPDIR)/%.d: ;
 -include $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS)))
 
 clean : 
-	@rm -f *~ $(BINARIES) $(BUILDDIR)/* data
+	@rm -f *~ $(BINARIES) $(BUILDDIR)/* data utils
 
 cleanall : clean
 	@rm -f $(DEPDIR)/* *.csv
