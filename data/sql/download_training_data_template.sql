@@ -32,6 +32,6 @@ WHERE
   logit_gbdt300_dstartau_score < 3.5 AND logit_gbdt300_dstartau_score > -2.0;
 
 --\copy (SELECT * FROM training_sample) TO 'evttype{0}.train.csv' WITH CSV HEADER DELIMITER ' '
-\copy (SELECT * FROM training_sample) TO 'evttype{0}.train.csv' DELIMITER ' '
+\copy (SELECT * FROM training_sample) TO 'evttype{0}.train.csv' DELIMITER ' ';
 
 COMMIT;

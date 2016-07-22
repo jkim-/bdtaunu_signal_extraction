@@ -18,6 +18,6 @@ WHERE
 
 CREATE INDEX ON scores (eid);
 
-\copy (SELECT z1, z2 FROM test_eid INNER JOIN scores USING (eid)) TO 'test.csv';
+\copy (SELECT z1, z2 FROM test_eid INNER JOIN scores USING (eid)) TO 'test.csv' DELIMITER ' ';
 
 COMMIT;

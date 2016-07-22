@@ -20,7 +20,7 @@ std::vector<PointT> read_2dpoints(const std::string &fname) {
 
   // initialize tokenizer
   typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-  boost::char_separator<char> sep(" ");
+  boost::char_separator<char> sep(" \t");
 
   // populate points 
   std::vector<PointT> points;
@@ -39,7 +39,7 @@ std::vector<PointT> read_2dpoints(const std::string &fname) {
     tokenizer tokens(line, sep);
     for (tokenizer::iterator tok_iter = tokens.begin();
          tok_iter != tokens.end(); ++tok_iter) {
-      column_values[icol] = std::stod(*tok_iter);
+      column_values.push_back(std::stod(*tok_iter));
       ++icol;
     }
     if (icol == 2) { column_values[icol] = 1.0; }

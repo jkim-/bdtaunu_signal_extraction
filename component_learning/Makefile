@@ -1,5 +1,5 @@
-#BBRKDE_ROOT = /home/dchao/workspace/bbrcit_kde
-BBRKDE_ROOT = /home/jkim/Analysis/bbrcit_kde
+BBRKDE_ROOT = /home/dchao/workspace/bbrcit_kde
+#BBRKDE_ROOT = /home/jkim/Analysis/bbrcit_kde
 
 all : 
 	$(MAKE) -C $(BBRKDE_ROOT)/grid_search

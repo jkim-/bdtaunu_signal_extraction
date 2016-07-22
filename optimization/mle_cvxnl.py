@@ -107,7 +107,7 @@ if __name__ == '__main__':
         print
         print 'Solver status: {0}'.format(sol['status'])
         print 'Minimum: {0}'.format(sol['primal objective'])
-        print 'Minimizers:', np.array(sol['x']).reshape(-1)
+        print 'Minimizers:', np.array(sol['x']).reshape(-1).tolist()
         print
         print
         sys.stdout.flush()
