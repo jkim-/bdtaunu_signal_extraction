@@ -5,6 +5,8 @@
 #include <cmath>
 #include <chrono>
 #include <string>
+#include <utility>
+#include <iomanip>
 
 #include <KernelDensity.h>
 
@@ -48,14 +50,23 @@ KernelDensityType construct_kernel_density(
   return kde;
 }
 
-double f(const std::vector<KernelDensityType> &kdes, KdtreeType &qtree, 
+double f(const std::vector<std::pair<double,double>> &x,
+         std::vector<KernelDensityType> &kdes, KdtreeType &qtree, 
          const std::vector<double> &p, 
          double rel_tol, double abs_tol, size_t gpu_block_size) {
 
   size_t n_components = kdes.size();
 
-  KdeEvalContainer results(qtree.size(), n_components);
+  // save current bandwidths
+  std::vector<std::pair<double,double>> curr_bw;
+  for (int j = 0; j < n_components; ++j) {
+    curr_bw.push_back({kdes[j].kernel().hx(), kdes[j].kernel().hy()});
+    kdes[j].kernel().set_hx(x[j].first); 
+    kdes[j].kernel().set_hy(x[j].second);
+  }
 
+  // evaluate densities
+  KdeEvalContainer results(qtree.size(), n_components);
   for (int j = 0; j < n_components; ++j) {
 
     // evaluate kernel density
@@ -66,6 +77,7 @@ double f(const std::vector<KernelDensityType> &kdes, KdtreeType &qtree,
 
   }
 
+  // accumulate log likelihood 
   double l = 0;
   for (size_t i = 0; i < results.m(); ++i) {
     double arg = 0;
@@ -73,6 +85,12 @@ double f(const std::vector<KernelDensityType> &kdes, KdtreeType &qtree,
       arg += results[i][j] * p[j];
     }
     l += -std::log(arg);
+  }
+
+  // restore bandwidths
+  for (int j = 0; j < n_components; ++j) {
+    kdes[j].kernel().set_hx(curr_bw[j].first);
+    kdes[j].kernel().set_hy(curr_bw[j].second);
   }
 
   return l;
@@ -135,40 +153,19 @@ int main() {
   elapsed = end - start; 
   std::cout << "  running time: " << elapsed.count() << " s. \n" << std::endl;
 
+  std::vector<std::pair<double,double>> x;
+  for (size_t j = 0; j < n_components; ++j) {
+    x.push_back({adapt_bwxs[j], adapt_bwys[j]});
+  }
+
+  std::cout << std::setprecision(13) << std::fixed;
+
   for (int t = 0; t < 10; ++t) {
 
     std::cout << "Iteration " << t << ": ";
     start = std::chrono::high_resolution_clock::now();
-    /*
-    KdeEvalContainer results(qtree.size(), n_components);
 
-    start = std::chrono::high_resolution_clock::now();
-    for (int j = 0; j < n_components; ++j) {
-
-      // evaluate kernel density
-      kdes[j].eval(qtree, rel_tol, abs_tol, gpu_block_size);
-
-      // save results
-      results.write_column(j, qtree.points(), false);
-
-    }
-
-    double l = 0;
-    for (size_t i = 0; i < results.m(); ++i) {
-      double arg = 0;
-      for (size_t j = 0; j < n_components; ++j) {
-        arg += results[i][j] * p[j];
-      }
-      l += -std::log(arg);
-    }
-    end = std::chrono::high_resolution_clock::now();
-
-    std::cout << l << ", in ";
-
-    elapsed = end - start;
-    std::cout << elapsed.count() << " s. " << std::endl;*/
-
-    double l = f(kdes, qtree, p, rel_tol, abs_tol, gpu_block_size);
+    double l = f(x, kdes, qtree, p, rel_tol, abs_tol, gpu_block_size);
 
     end = std::chrono::high_resolution_clock::now();
 
