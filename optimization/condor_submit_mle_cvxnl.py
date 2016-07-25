@@ -1,4 +1,4 @@
-#! /nfs/raid13/babar/dchao/software_sl6/anaconda2/bin/python
+#!/usr/bin/env python
 
 import sys
 import os

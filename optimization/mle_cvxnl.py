@@ -1,4 +1,4 @@
-#! /local/dchao/software/anaconda2/bin/python
+#!/usr/bin/env python
 
 import sys
 import math

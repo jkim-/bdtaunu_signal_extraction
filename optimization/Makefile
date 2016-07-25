@@ -4,7 +4,7 @@ OBJECTS =
 
 SRCS = $(wildcard *.cc *.cpp)
 
-SYMLINKS = data
+SYMLINKS = data custom_python_utilities
 
 CUDA_ROOT = /usr/local/cuda-7.5
 CUDA_LIBS = $(CUDA_ROOT)/lib64
@@ -16,6 +16,8 @@ BBRCITKDE_ROOT = /home/dchao/workspace/bbrcit_kde
 
 SIGNAL_EXTRACTION_ROOT = /home/dchao/workspace/bdtaunu_signal_extraction
 SIGNAL_EXTRACTION_UTILS_LIBS = $(SIGNAL_EXTRACTION_ROOT)/utils/lib
+
+CUSTOM_PYTHON_UTILITIES = /home/dchao/workspace/custom_python_utilities
 
 INCFLAGS = -I$(BBRCITKDE_ROOT)/include -I$(BOOST_ROOT) \
 					 -I$(SIGNAL_EXTRACTION_ROOT)
@@ -47,6 +49,9 @@ all : $(BINARIES) $(SYMLINKS)
 data : 
 	ln -s $(SIGNAL_EXTRACTION_ROOT)/data data
 
+custom_python_utilities : 
+	ln -s $(CUSTOM_PYTHON_UTILITIES) custom_python_utilities
+
 precompute_component_densities : $(addprefix $(BUILDDIR)/, precompute_component_densities.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
 
@@ -67,7 +72,7 @@ $(DEPDIR)/%.d: ;
 -include $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS)))
 
 clean : 
-	@rm -f *~ $(BINARIES) $(BUILDDIR)/* data
+	@rm -f *~ $(BINARIES) $(BUILDDIR)/* $(SYMLINKS)
 
 cleanall : clean
 	@rm -f $(DEPDIR)/* *.csv
