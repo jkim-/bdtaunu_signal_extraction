@@ -1,4 +1,4 @@
-BINARIES = visualize_marginal_densities visualize_component_densities
+BINARIES = visualize_stacked_components visualize_individual_components
 
 OBJECTS = 
 
@@ -49,10 +49,10 @@ data :
 utils :
 	ln -s $(SIGNAL_EXTRACTION_ROOT)/utils utils
 
-visualize_component_densities : $(addprefix $(BUILDDIR)/, visualize_component_densities.o $(OBJECTS))
+visualize_individual_components : $(addprefix $(BUILDDIR)/, visualize_individual_components.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
 
-visualize_marginal_densities : $(addprefix $(BUILDDIR)/, visualize_marginal_densities.o $(OBJECTS))
+visualize_stacked_components : $(addprefix $(BUILDDIR)/, visualize_stacked_components.o $(OBJECTS))
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 $(BUILDDIR)/%.o : %.cpp

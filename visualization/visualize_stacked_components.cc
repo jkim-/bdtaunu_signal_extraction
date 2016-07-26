@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
 
     if (vm.count("help") || !vm.count("config_file")) {
       std::cout << std::endl;
-      std::cout << "Usage: visualize_stacked_densities [options] config_fname" << std::endl;
+      std::cout << "Usage: visualize_stacked_components [options] config_fname" << std::endl;
       std::cout << visible << "\n";
       return 0;
     }
