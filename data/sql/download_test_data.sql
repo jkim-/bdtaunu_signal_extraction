@@ -9,7 +9,8 @@ CREATE TEMPORARY TABLE scores AS
 SELECT 
   eid,
   logit_gbdt300_signal_score AS z1,
-  logit_gbdt300_dstartau_score AS z2
+  logit_gbdt300_dstartau_score AS z2,
+  1.0 AS w
 FROM 
   candidate_optimized_events_scores_generic_t
 WHERE 
@@ -18,6 +19,6 @@ WHERE
 
 CREATE INDEX ON scores (eid);
 
-\copy (SELECT z1, z2 FROM test_eid INNER JOIN scores USING (eid)) TO 'test.csv' DELIMITER ' ';
+\copy (SELECT z1, z2, w FROM test_eid INNER JOIN scores USING (eid)) TO 'test.csv' DELIMITER ' ';
 
 COMMIT;

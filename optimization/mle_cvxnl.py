@@ -6,12 +6,7 @@ import numpy as np
 import cvxopt as cvx
 from iopro import genfromtxt
 
-# Truth proportions:
-# 0.004597168626601867
-# 0.009011011183443553
-# 0.41817119150694954
-# 0.07374540140202024
-# 0.49265798277959727
+# function that calls CVXOPT to solve maximum likelihood 
 def perform_mle(p, obj_scale=1e-8):
 
     # get cache dimensions
@@ -71,6 +66,16 @@ def perform_mle(p, obj_scale=1e-8):
     return sol
 
 
+def print_solution(sol):
+    print
+    print 'Solver status: {0}'.format(sol['status'])
+    print 'Minimum: {0}'.format(sol['primal objective'])
+    print 'Minimizers:', np.array(sol['x']).reshape(-1).tolist()
+    print
+    print
+    sys.stdout.flush()
+
+
 if __name__ == '__main__':
 
     import argparse
@@ -81,6 +86,8 @@ if __name__ == '__main__':
                         help='Path to the data sample cached kde score.')
     parser.add_argument('output_fname', type=str,
                         help='Path to store output.')
+    parser.add_argument('--weight_fname', type=str, default=None,
+                        help='File containing the weight of each point in sample_fname. ')
     parser.add_argument('--obj_scale', type=float, default=1e-8,
                         help='Scale factor to apply to objective function.')
     args = parser.parse_args()
@@ -88,6 +95,16 @@ if __name__ == '__main__':
     # Read in cached KDE evalutions of the data sample to fit
     p_raw = genfromtxt(args.sample_fname)
     N, D = p_raw.shape
+
+    # Read in cached weights if supplied
+    w = None
+    if args.weight_fname:
+        w = genfromtxt(args.weight_fname)
+        if w.shape[0] != N: 
+            s = '{0} should have the same number of rows as {1}.'.format(
+                    args.weight_fname, args.sample_fname)
+            raise Exception(s)
+        w /= np.sum(w)
 
     # Open the file to write results
     fout = open(args.output_fname, 'w')
@@ -98,19 +115,18 @@ if __name__ == '__main__':
         sys.stdout.flush()
 
         # Create a bagged sample.
-        p = p_raw[np.random.choice(N, N)]
+        bag = None 
+        if w is None: 
+            bag = np.random.choice(N, N)
+        else:
+            bag = np.random.choice(N, N, p=w)
+        p = p_raw[bag]
 
-        # Solve
+        # Solve the optmization problem
         sol = perform_mle(p, args.obj_scale)
 
-        # Report results
-        print
-        print 'Solver status: {0}'.format(sol['status'])
-        print 'Minimum: {0}'.format(sol['primal objective'])
-        print 'Minimizers:', np.array(sol['x']).reshape(-1).tolist()
-        print
-        print
-        sys.stdout.flush()
+        # Report and write results
+        print_solution(sol)
 
         fout.write(' '.join(map(str, np.array(sol['x']).reshape(-1).tolist())) + '\n')
 

@@ -47,6 +47,22 @@ KernelDensityType construct_kernel_density(
   return kde;
 }
 
+// write point weights to output stream. one per row. 
+// sort_rows can be used to keep the row ordering consistent
+// across separate invocations of `main()`.
+template<typename PointT>
+void write_weights(std::ostream &os, std::vector<PointT> source, bool sort_rows) {
+
+  if (sort_rows) {
+    std::sort(source.begin(), source.end(), ReverseExactLexicoLess<PointT>);
+  }
+
+  for (size_t i = 0; i < source.size(); ++i) {
+    os << source[i].attributes().weight() << std::endl;
+  }
+
+}
+
 
 // main routine. 
 void evaluate(const po::variables_map &vm);
@@ -73,7 +89,8 @@ int main(int argc, char **argv) {
         ("input_data_dir", po::value<std::string>(), "directory to the input data. ")
         ("input_sample_fname", po::value<std::string>(), "input path to the data sample. ")
         ("input_component_fnames", po::value<std::string>(), "input paths to the components. ")
-        ("out_fname", po::value<std::string>(), "output file name. ")
+        ("out_kde_fname", po::value<std::string>(), "output file name. ")
+        ("out_weight_fname", po::value<std::string>(), "output file name. ")
         ("sort_rows", po::value<bool>(), "if true, sort output by point coordinates. "
                                          "this is required if row ordering should be "
                                          "the same across separate invocations. ")
@@ -286,10 +303,23 @@ void evaluate(const po::variables_map &vm) {
   }
 
   // 4. write results to file
-  std::string out_fname = vm["out_fname"].as<std::string>();
-  std::cout << "+ writing results to file: " << out_fname << "\n" << std::endl;
-  std::ofstream fout(out_fname);
+
+  // density evaluations
+  std::string out_kde_fname = vm["out_kde_fname"].as<std::string>();
+  std::cout << "+ writing density evaluations to file: " << out_kde_fname << "\n" << std::endl;
+  std::ofstream fout;
+
+  fout.open(out_kde_fname);
   fout << results;
+  fout.close();
+
+  // weights
+  std::string out_weight_fname = vm["out_weight_fname"].as<std::string>();
+  std::cout << "+ writing weights to file: " << out_weight_fname << "\n" << std::endl;
+
+  fout.open(out_weight_fname);
+  write_weights(fout, qtree.points(), sort_rows);
+  fout.close();
 
   // 5. done
   end_total = std::chrono::high_resolution_clock::now();

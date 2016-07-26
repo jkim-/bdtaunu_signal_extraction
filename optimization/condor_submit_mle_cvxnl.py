@@ -6,7 +6,7 @@ import datetime
 import tempfile
 import subprocess
 
-def write_condor_submit_file(f, dirname, node_idx, cached_kde_fname, bags):
+def write_condor_submit_file(f, dirname, node_idx, cached_kde_fname, bags, weight_fname):
 
   result_fname = os.getcwd() + '/{0}/result/{1}.csv'.format(dirname, node_idx)
   out_fname = '{0}/out/{1}.out'.format(dirname, node_idx)
@@ -14,9 +14,16 @@ def write_condor_submit_file(f, dirname, node_idx, cached_kde_fname, bags):
   log_fname = '{0}/log/{1}.log'.format(dirname, node_idx)
   cached_kde_fname = os.getcwd() + '/' + cached_kde_fname
 
+  arguments = 'arguments = {0} {1} {2}\n'.format(bags, cached_kde_fname, result_fname)
+  if weight_fname is not None:
+      weight_fname = os.getcwd() + '/' + weight_fname
+      arguments = 'arguments = {0} {1} {2} --weight_fname={3} \n'.format(
+              bags, cached_kde_fname, result_fname, weight_fname)
+
+  # write condor submit file
   f.write('executable = mle_cvxnl.py\n')
   f.write('universe = vanilla\n')
-  f.write('arguments = {0} {1} {2}\n'.format(bags, cached_kde_fname, result_fname))
+  f.write(arguments)
   f.write('output = {0}\n'.format(out_fname))
   f.write('error = {0}\n'.format(err_fname))
   f.write('log = {0}\n'.format(log_fname))
@@ -42,6 +49,8 @@ if __name__ == '__main__':
   parser.add_argument('cached_kde_fname', 
                               help='Absolute path to cached kde scores.')
   parser.add_argument('output_dir', help='Directory to place results. ')
+  parser.add_argument('--weight_fname', type=str, default=None,
+                              help='Absolute path to cached point weights.')
   parser.add_argument('--debug', action='store_true')
   args = parser.parse_args()
 
@@ -51,7 +60,7 @@ if __name__ == '__main__':
 
   for i in range(args.nodes):
     f = tempfile.NamedTemporaryFile()
-    write_condor_submit_file(f, dirname, i, args.cached_kde_fname, args.bags)
+    write_condor_submit_file(f, dirname, i, args.cached_kde_fname, args.bags, args.weight_fname)
     if args.debug and i == 0: 
       print_condor_submit_file(f)
     f.seek(0)
