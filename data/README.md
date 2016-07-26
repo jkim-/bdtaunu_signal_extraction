@@ -1,32 +1,53 @@
-Data download scripts
+Overview
 ---
 
-+ `download_kde_trainig_data.py`: Downloads the data of a specified event type from the table `candidate_optimized_events_scores_generic_t` of database `bdtaunuhad_lite` into a csv file, which represent the generic MC. The following are basic instructions for use, use `python download_kde_trainig_data -h` to see the full set of available parameters. 
+This directory contains the analysis data viewed under various schemes as well as the code to download them. 
 
-  Input (required): event type index. 
+Each sub-directory contains a specific instance of a queried dataset. The datasets currently available and their specific settings are documented below.
 
-    Presently, the event type index is `grouped_dss_evttype`, which has the following index convention:
-    + 1: Dtau.
-    + 2: D\*tau.
-    + 3: D\*\* SL.
-    + 4: SLhad.
-    + 5: Cont.
+Despite the differences for which each dataset is queried, they must contain the following data files: 
 
-  Output: CSV file of 3 columns, (`z1`, `z2`, `w`). 
+1. Training data: `evttypeX.train.csv`, where `X` runs from `1` up to the maximum number of event type components in the query instance.
+2. Test data: `test.csv`. 
 
-    Presently, the columns contain values for the follwoing:
-    + `z1`: `logit_gbdt300_signal_score`.
-    + `z2`: `logit_gbdt300_dstartau_score`.
-    + `w`: `lumi_weight`.
+Furthermore, all data files must conform to the following standard:
++ 3 columns: `z1`, `z2`, `w`. `z1` and `z2` are the features, and `w` is the record weight. If no weights are desired, set `w` to `1.0`. 
++ Space separated. 
++ No headers. 
+
+To make obtaining the data straighforward, all subdirectories must contain the following scripts that download the training and test data, respectively:
+
++ `download_kde_training_data.py`: Downloads the training data for the various event type components. Its first positional argument should correspond to the event type code, and should also take an optional argument for undersampling. 
+
++ `download_test_data.py`: Downloads the test data. No arguments are required. 
+
+The scripts available in this top level directory are general purpose. `subsample.py`, for instance, should not be used as a substitue for the sub-sampling functionality in `download_kde_training_data.py`.
+
+Datasets
+---
+
+The following are the datasets that are currently available:
+
++ `mc.default`: This is simulated data based on the defaults of those output from the BABAR framework. 
+
+   + Training data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=6`.
+   + Test data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=5`.
+   + Event type categories: `grouped_dss_evttype`. 
+   + `z1`: `logit_gbdt300_signal_score`. 
+   + `z2`: `logit_gbdt300_dstartau_score`. 
+   + Training `w`: `lumi_weight` in `event_weight_generic_augmented`. 
+   + Testing `w`: `1.0`, since was pre-allocated when it was inserted into the database. 
+   + Training data undersampling: `[1.0, 1.0, 0.55, 0.14, 0.14]`.
 
 
-  Undersampling (optional):
+Event type reference
+---
 
-    At present, the number of rows in the database requires the following undersampling to get at most ~1M points in each file:
-    + 1: 1.0
-    + 2: 1.0
-    + 3: 0.55
-    + 4: 0.14
-    + 5: 0.14
+The following is a quick reference for the various event type category codes:
 
-+ `download_test_data.py`: Downloads the test data from the table `candidate_optimized_events_scores_generic_t` of database `bdtaunuhad_lite` into a csv file, which represent the generic MC. This is the default simluated sample that adjusted to represent the proportions and normalizations of the real data as closely as possible. 
++ `grouped_dss_evttype`:
+    1. Dtau.
+    2. D\*tau.
+    3. D\*\* SL.
+    4. SLhad.
+    5. Cont.
