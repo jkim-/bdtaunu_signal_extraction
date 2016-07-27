@@ -9,7 +9,7 @@ parser.add_argument('--skip_cross_validation', action='store_true',
 parser.add_argument('--adapted', action='store_true',
                    help='Perform adapted cross validation. ')
 parser.add_argument('evttypes', type=int, nargs='+',
-                   help='evttypes: any combination of 1, 2, 3, 4, or 5')
+                   help='any combination of the numeric codes infixed in a cfg file. ')
 args = parser.parse_args()
 
 print
