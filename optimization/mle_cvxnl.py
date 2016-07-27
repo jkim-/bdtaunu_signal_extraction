@@ -82,36 +82,46 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('nbag', type=int,
                         help='Number of trials to bag/fit.')
-    parser.add_argument('sample_fname', type=str,
-                        help='Path to the data sample cached kde score.')
-    parser.add_argument('output_fname', type=str,
+    parser.add_argument('cached_densities_fname', type=str,
+                        help='File containing cached kde evaluations.')
+    parser.add_argument('cached_weights_fname', type=str, 
+                        help='File containing the weight of each point in cached_densities_fname. ')
+    parser.add_argument('--output_fname', type=str, default='mle_cvxnl.result.csv',
                         help='Path to store output.')
-    parser.add_argument('--weight_fname', type=str, default=None,
-                        help='File containing the weight of each point in sample_fname. ')
     parser.add_argument('--obj_scale', type=float, default=1e-8,
                         help='Scale factor to apply to objective function.')
     args = parser.parse_args()
 
     # Read in cached KDE evalutions of the data sample to fit
-    p_raw = genfromtxt(args.sample_fname)
+    print '+ Configuration parameters:\n'.format(args.cached_densities_fname)
+    print '  number of bags: {0}.\n'.format(args.nbag)
+    print '  cached densities: {0}.\n'.format(args.cached_densities_fname)
+    print '  cached weights: {0}.\n'.format(args.cached_weights_fname)
+    print '  output file: {0}.\n'.format(args.output_fname)
+    sys.stdout.flush()
+
+    p_raw = genfromtxt(args.cached_densities_fname)
     N, D = p_raw.shape
 
-    # Read in cached weights if supplied
-    w = None
-    if args.weight_fname:
-        w = genfromtxt(args.weight_fname)
-        if w.shape[0] != N: 
-            s = '{0} should have the same number of rows as {1}.'.format(
-                    args.weight_fname, args.sample_fname)
-            raise Exception(s)
-        w /= np.sum(w)
+    # Read in cached weights 
+    print '+ Reading cached files.\n'.format(args.cached_weights_fname)
+    sys.stdout.flush()
+
+    w = genfromtxt(args.cached_weights_fname)
+    if w.shape[0] != N: 
+        s = '{0} should have the same number of rows as {1}.'.format(
+                args.cached_weights_fname, args.cached_densities_fname)
+        raise Exception(s)
+    w /= np.sum(w)
 
     # Open the file to write results
     fout = open(args.output_fname, 'w')
 
+    print '+ Solving maximum likelihood.\n'.format(args.output_fname)
+    sys.stdout.flush()
     for i in range(args.nbag):
 
-        sys.stdout.write('Bag iteration {0}:\n\n'.format(i+1))
+        sys.stdout.write('Bag iteration {0}.\n\n'.format(i+1))
         sys.stdout.flush()
 
         # Create a bagged sample.
@@ -133,3 +143,6 @@ if __name__ == '__main__':
 
     # Cleanup
     fout.close()
+
+    print '+ Done. Results written to {0}.\n'.format(args.output_fname)
+    sys.stdout.flush()
