@@ -29,7 +29,7 @@ for evttype in args.evttypes:
          stdout=f)
 
 print 'Producing stacked component data...'
-cfg_fname = '/stacked_components.cfg'
+cfg_fname = 'stacked_components.cfg'
 with open(out_fname, 'w') as f: 
     subprocess.check_call(
         ['../visualize_stacked_components', cfg_fname], 
