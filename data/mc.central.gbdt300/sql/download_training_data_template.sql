@@ -36,8 +36,8 @@ CREATE INDEX ON evttype_eid (eid);
 CREATE TEMPORARY TABLE evttype_features AS
 SELECT 
   eid,
-  logit_logre_signal_score AS z1,
-  logit_logre_dstartau_score AS z2
+  logit_gbdt300_signal_score AS z1,
+  logit_gbdt300_dstartau_score AS z2
 FROM 
   evttype_eid 
   INNER JOIN 
@@ -60,7 +60,7 @@ SELECT
   (lumi_weight * 
    brf_correction_weight * 
    cln_weight * llswb1_weight * 
-   continuum_logre_density_weight * continuum_logre_normalization_weight) AS w
+   continuum_gbdt300_density_weight * continuum_gbdt300_normalization_weight) AS w
 FROM 
   evttype_features INNER JOIN event_weights_generic_augmented USING (eid)
 ;

@@ -60,7 +60,7 @@ SELECT
   (lumi_weight * 
    brf_correction_weight * 
    cln_weight * llswb1_weight * 
-   logre_density_weight * logre_normalization_weight) AS w
+   continuum_logre_density_weight * continuum_logre_normalization_weight) AS w
 FROM 
   evttype_features INNER JOIN event_weights_generic_augmented USING (eid)
 ;

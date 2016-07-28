@@ -39,6 +39,17 @@ The following are the datasets that are currently available:
    + Testing `w`: `cln_weight`, `llswb1_weight`, `logre_density_weight`, `logre_normalization_weight`. `lumi_weight` not included since it was pre-allocated when it was inserted into the database. 
    + Training data undersampling: `[1.0, 1.0, 0.55, 0.14, 0.16]`.
 
+
+
+
++ `mc.central.gbdt300`: Same as `mc.central.logre`, except
+  
+    + `z1`: `logit_gbdt300_signal_score`.
+    + `z2`: `logit_gbdt300_dstartau_score`.
+
+
+
+
 + (NEEDS UPDATE) `mc.default`: This is simulated data based on the defaults of those output from the BABAR framework. 
 
    + Training data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=6`.
