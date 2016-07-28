@@ -112,6 +112,15 @@ if __name__ == '__main__':
         s = '{0} should have the same number of rows as {1}.'.format(
                 args.cached_weights_fname, args.cached_densities_fname)
         raise Exception(s)
+
+    # Scale that determines the overall normalization of the sample
+    sample_scale = np.sum(w) / N
+    print '  sample counts = {0} '.format(N)
+    print '  weighted counts = {0} '.format(np.sum(w))
+    print '  sample scale = {0}'.format(sample_scale)
+    print '  => will draw {0} records per boostrap sample.\n'.format(int(sample_scale*N))
+
+    # Convert weights to relative frequencies
     w /= np.sum(w)
 
     # Open the file to write results
@@ -129,7 +138,7 @@ if __name__ == '__main__':
         if w is None: 
             bag = np.random.choice(N, N)
         else:
-            bag = np.random.choice(N, N, p=w)
+            bag = np.random.choice(N, int(N*sample_scale), p=w)
         p = p_raw[bag]
 
         # Solve the optmization problem

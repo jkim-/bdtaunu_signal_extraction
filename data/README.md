@@ -28,7 +28,18 @@ Datasets
 
 The following are the datasets that are currently available:
 
-+ `mc.default`: This is simulated data based on the defaults of those output from the BABAR framework. 
++ `mc.central.logre`: This is the simulated data meant to represent our best knowledge of physics. 
+
+   + Training data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=6`. Sidebands removed.
+   + Test data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=5`. Sidebands removed.
+   + Event type categories: `grouped_dss_evttype`. 
+   + `z1`: `logit_logre_signal_score`. 
+   + `z2`: `logit_logre_dstartau_score`. 
+   + Training `w`: `lumi_weight`, `cln_weight`, `llswb1_weight`, `logre_density_weight`, `logre_normalization_weight`. 
+   + Testing `w`: `cln_weight`, `llswb1_weight`, `logre_density_weight`, `logre_normalization_weight`. `lumi_weight` not included since it was pre-allocated when it was inserted into the database. 
+   + Training data undersampling: `[1.0, 1.0, 0.55, 0.14, 0.16]`.
+
++ (NEEDS UPDATE) `mc.default`: This is simulated data based on the defaults of those output from the BABAR framework. 
 
    + Training data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=6`.
    + Test data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=5`.
