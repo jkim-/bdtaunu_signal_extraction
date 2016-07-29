@@ -8,6 +8,7 @@ Each sub-directory contains a specific instance of a queried dataset. The datase
 Despite the differences for which each dataset is queried, they must contain the following data files: 
 
 1. Training data: `evttypeX.train.csv`, where `X` runs from `1` up to the maximum number of event type components in the query instance.
+2. Tuning data: `tuning.csv`. 
 2. Test data: `test.csv`. 
 
 Furthermore, all data files must conform to the following standard:
@@ -19,7 +20,7 @@ To make obtaining the data straighforward, all subdirectories must contain the f
 
 + `download_kde_training_data.py`: Downloads the training data for the various event type components. Its first positional argument should correspond to the event type code, and should also take an optional argument for undersampling. 
 
-+ `download_test_data.py`: Downloads the test data. No arguments are required. 
++ `download_test_data.py`: Downloads the test and the tuning. 
 
 The scripts available in this top level directory are general purpose. `subsample.py`, for instance, should not be used as a substitue for the sub-sampling functionality in `download_kde_training_data.py`.
 
