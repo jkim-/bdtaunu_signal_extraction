@@ -43,14 +43,6 @@ The following are the datasets that are currently available:
 
 
 
-+ `mc.central.gbdt300`: Same as `mc.central.logre`, except
-  
-    + `z1`: `logit_gbdt300_signal_score`.
-    + `z2`: `logit_gbdt300_dstartau_score`.
-
-
-
-
 + (NEEDS UPDATE) `mc.default`: This is simulated data based on the defaults of those output from the BABAR framework. 
 
    + Training data source: `candidate_optimized_events_scores_generic_t` joined with `sample_assignment_generic` with `sample_type=6`.
