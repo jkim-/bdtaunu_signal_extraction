@@ -45,7 +45,7 @@ FROM
   test_features INNER JOIN event_weights_generic_augmented USING (eid)
 ;
 
-\copy (SELECT * FROM test_sample) TO 'test.csv' WITH DELIMITER ' ';
+\copy (SELECT * FROM test_sample) TO 'tuning.csv' WITH DELIMITER ' ';
 
 
 COMMIT;
