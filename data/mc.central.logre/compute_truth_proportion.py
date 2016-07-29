@@ -5,14 +5,16 @@ import subprocess
 import time
 import tempfile
 
+
 if __name__ == '__main__':
     
     import argparse 
-    parser = argparse.ArgumentParser(description='Download test data.')
+    parser = argparse.ArgumentParser(
+            description='Compute truth proportion in the test samples. ')
     parser.add_argument('--test', action='store_true',
-                        help='Download the test sample. ')
+                        help='Compute truth proportions on tuning sample. ')
     parser.add_argument('--tuning', action='store_true',
-                        help='Download the tuning sample. ')
+                        help='Compute truth proportions on tuning sample. ')
     parser.add_argument('--dbname', default='bdtaunuhad_lite',
                         help='Database name. ')
     parser.add_argument('--verbose', action='store_true',
@@ -28,26 +30,28 @@ if __name__ == '__main__':
     print "  dbname = {0}".format(args.dbname)
     sys.stdout.flush()
 
-    sql_script = None
+    sql_script = None 
     if args.tuning:
-        sql_script = 'sql/download_tuning_data.sql'
+        sql_script = 'sql/compute_truth_tuning_proportion.sql'
         print "  sample type: tuning"
         print "    => query script = {0}".format(sql_script)
         sys.stdout.flush()
     else:
-        sql_script = 'sql/download_test_data.sql'
+        sql_script = 'sql/compute_truth_test_proportion.sql'
         print "  sample type: test"
         print "    => query script = {0}".format(sql_script)
         sys.stdout.flush()
     print
 
-    print "+ downloading..."
-    sys.stdout.flush()
 
-    start = time.time()
     verbosity_flag = "-q"
     if args.verbose: 
         verbosity_flag = "-a"
+
+    print "+ querying.\n"
+    sys.stdout.flush()
+
+    start = time.time()
     subprocess.check_call(["psql", 
                             verbosity_flag,
                             "-d", args.dbname, 

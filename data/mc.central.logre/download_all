@@ -3,4 +3,5 @@ python download_kde_training_data.py 2
 python download_kde_training_data.py 3 --undersample=0.55
 python download_kde_training_data.py 4 --undersample=0.14
 python download_kde_training_data.py 5 --undersample=0.16
-python download_test_data.py
+python download_test_data.py --tuning
+python download_test_data.py --test
