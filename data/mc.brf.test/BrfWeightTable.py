@@ -61,7 +61,7 @@ class BrfWeightTable:
 
 if __name__ == '__main__':
 
-    brf_table = BrfWeightTable('test.dat')
+    brf_table = BrfWeightTable('brf_weight_variations.test.dat')
 
     for i in brf_table.table.items():
         print i
