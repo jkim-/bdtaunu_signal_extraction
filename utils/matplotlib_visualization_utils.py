@@ -42,7 +42,7 @@ def plot_data1d_histogram(sample, bins=20, weights=None, normed=False, xlim=None
                           orientation='vertical'):
     
     # produce the unnormalized histrogram and assign plot coordinates
-    y, edges = np.histogram(sample, bins)
+    y, edges = np.histogram(sample, bins, weights=weights)
     x = (edges[:-1]+edges[1:])*0.5
     
     
