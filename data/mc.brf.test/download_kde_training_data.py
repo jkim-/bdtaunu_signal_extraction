@@ -6,7 +6,7 @@ import subprocess
 import time
 import tempfile
 
-from BrfWeightTable import BrfWeightTable
+from utils.BrfWeightTable import BrfWeightTable
 
 def instantiate_tempfile(in_fname, s):
     temp = tempfile.NamedTemporaryFile()
@@ -100,10 +100,11 @@ if __name__ == '__main__':
     print "  done. completed in {0} seconds. \n".format(round(end-start, 2))
     sys.stdout.flush()
 
-    print "+ cleaning up. "
-    sys.stdout.flush()
-    start = time.time()
-    os.remove(aux_fname)
-    end = time.time()
-    print "  done. completed in {0} seconds. \n".format(round(end-start, 2))
-    sys.stdout.flush()
+    if not args.keep_aux:
+        print "+ cleaning up. "
+        sys.stdout.flush()
+        start = time.time()
+        os.remove(aux_fname)
+        end = time.time()
+        print "  done. completed in {0} seconds. \n".format(round(end-start, 2))
+        sys.stdout.flush()
