@@ -90,32 +90,52 @@ if __name__ == '__main__':
                         help='Path to store output.')
     parser.add_argument('--obj_scale', type=float, default=1e-8,
                         help='Scale factor to apply to objective function.')
+    parser.add_argument('--outlier_strategy', type=str, default='remove',
+                        help="Strategy for removing outliers. "
+                             "'remove': simply remove them. "
+                             "'random': randomly perturb by minimum float value. not implemented.")
     args = parser.parse_args()
 
     # Read in cached KDE evalutions of the data sample to fit
     print '+ Configuration parameters:\n'.format(args.cached_densities_fname)
-    print '  number of bags: {0}.\n'.format(args.nbag)
-    print '  cached densities: {0}.\n'.format(args.cached_densities_fname)
-    print '  cached weights: {0}.\n'.format(args.cached_weights_fname)
+    print '  number of bags: {0}.'.format(args.nbag)
+    print '  cached densities: {0}.'.format(args.cached_densities_fname)
+    print '  cached weights: {0}.'.format(args.cached_weights_fname)
     print '  output file: {0}.\n'.format(args.output_fname)
     sys.stdout.flush()
 
     p_raw = genfromtxt(args.cached_densities_fname)
-    N, D = p_raw.shape
 
     # Read in cached weights 
     print '+ Reading cached files.\n'.format(args.cached_weights_fname)
     sys.stdout.flush()
 
     w = genfromtxt(args.cached_weights_fname)
-    if w.shape[0] != N: 
+    if w.shape[0] != p_raw.shape[0]: 
         s = '{0} should have the same number of rows as {1}.'.format(
                 args.cached_weights_fname, args.cached_densities_fname)
         raise Exception(s)
 
+    # Outlier processing
+    N_orig = p_raw.shape[0]
+
+    zero_row = np.sum(p_raw, axis=1) == 0
+    if args.outlier_strategy == 'remove':
+        p_raw = p_raw[~zero_row]
+        w = w[~zero_row]
+    else:
+        raise RuntimeError('mle_cvxnl.py: unrecognized --outlier_strategy. ')
+
+    N, D = p_raw.shape
+
+    print '  outlier strategy: {0}'.format(args.outlier_strategy)
+    print '  original counts = {0}'.format(N_orig)
+    print '  sample counts = {0}'.format(N)
+    print '  points removed = {0}\n'.format(N_orig - N)
+
     # Scale that determines the overall normalization of the sample
     sample_scale = np.sum(w) / N
-    print '  sample counts = {0} '.format(N)
+
     print '  weighted counts = {0} '.format(np.sum(w))
     print '  sample scale = {0}'.format(sample_scale)
     print '  => will draw {0} records per boostrap sample.\n'.format(int(sample_scale*N))
