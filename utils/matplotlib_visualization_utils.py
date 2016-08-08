@@ -36,7 +36,8 @@ def plot_data1d(data1d_fname, ax=None, xlim=None, linestyle='-', marker=None,
 
 
 # plot 1d data histrogram using evenly sized bins. 
-def plot_data1d_histogram(sample, bins=20, weights=None, normed=False, xlim=None,
+def plot_data1d_histogram(sample, bins=20, weights=None, normed=False, 
+                          xlim=None, ylim=None,
                           ax=None, marker='.', color='k', linestyle='None', 
                           title=None, xlabel=None, axis_fontsize=20, tick_labelsize=16, 
                           orientation='vertical'):
@@ -75,6 +76,7 @@ def plot_data1d_histogram(sample, bins=20, weights=None, normed=False, xlim=None
         raise RuntimeError("orientation must be 'vertical' or 'horizontal'. ")
 
     if xlim: ax.set_xlim(xlim)
+    if ylim: ax.set_ylim(ylim)
 
     # customize axis labels
     ax.tick_params(axis='both', which='major', labelsize=tick_labelsize)
