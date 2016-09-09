@@ -1,0 +1,117 @@
++ configurations: 
+
+  evttype = 1
+  undersample = 1.0
+  dbname = bdtaunuhad_lite
+
++ downloading data from database.
+  done. completed in 5.71 seconds. 
+
++ converting to training data. 
+  done. completed in 0.45 seconds. 
+
++ cleaning up. 
+  done. completed in 0.0 seconds. 
+
++ configurations: 
+
+  evttype = 2
+  undersample = 1.0
+  dbname = bdtaunuhad_lite
+
++ downloading data from database.
+  done. completed in 19.08 seconds. 
+
++ converting to training data. 
+  done. completed in 0.76 seconds. 
+
++ cleaning up. 
+  done. completed in 0.01 seconds. 
+
++ configurations: 
+
+  evttype = 3
+  undersample = 0.55
+  dbname = bdtaunuhad_lite
+
++ downloading data from database.
+  done. completed in 48.21 seconds. 
+
++ converting to training data. 
+  done. completed in 3.57 seconds. 
+
++ cleaning up. 
+  done. completed in 0.05 seconds. 
+
++ configurations: 
+
+  evttype = 4
+  undersample = 0.14
+  dbname = bdtaunuhad_lite
+
++ downloading data from database.
+  done. completed in 53.36 seconds. 
+
++ converting to training data. 
+  done. completed in 3.48 seconds. 
+
++ cleaning up. 
+  done. completed in 0.05 seconds. 
+
++ configurations: 
+
+  evttype = 5
+  undersample = 0.16
+  dbname = bdtaunuhad_lite
+
++ downloading data from database.
+  done. completed in 51.48 seconds. 
+
++ converting to training data. 
+  done. completed in 3.79 seconds. 
+
++ cleaning up. 
+  done. completed in 0.06 seconds. 
+
++ configurations: 
+
+  dbname = bdtaunuhad_lite
+  sample type: tuning
+    => query script = sql/download_tuning_data.sql
+
++ querying database. 
+  done. completed in 81.63 seconds. 
+
++ converting to tuning data. 
+  truth proportions: 
+
+evttype   default w           varied w            adjusted w          tuning p            
+1         66121.7182489       66556.7267046       66121.7182489       0.0080384028337     
+2         116810.977284       117478.067619       116810.977284       0.0142006849742     
+3         1021357.18479       1029039.28108       1021357.18479       0.124166169693      
+4         3551496.67241       3599622.18561       3551496.67241       0.431754674128      
+5         3469941.81855       3469941.81855       3469941.81855       0.421840068372      
+
+  done. completed in 60.41 seconds. 
+
++ cleaning up. 
+  done. completed in 0.4 seconds. 
+
++ configurations: 
+
+  dbname = bdtaunuhad_lite
+  sample type: test
+    => query script = sql/download_test_data.sql
+
++ querying database. 
+ evttype |                                 sum                                  |                               p                                
+---------+----------------------------------------------------------------------+----------------------------------------------------------------
+       1 |   65988.179946159329332498050497002775278100407719652692671283285700 | 0.008043845775428608192815053991917614572332713324082800550900
+       2 |  105566.171659198302733197551371355656345241507736449803579279070800 | 0.012868334974867518983032929473595757773442781524851094813720
+       3 | 1020279.453969658461503291508822928006604936744297479517802894204900 | 0.124370312717620418907327756102241931164188890544196292346503
+       4 |                   3541785.432172695463380906259667921869887933477200 | 0.431737559806952752739315794623705126559528248502693030002710
+       5 |                    3469941.81854854940082697980504123514266422085000 | 0.422979946725130701177508465808539569930507366104176782286167
+(5 rows)
+
+  done. completed in 96.33 seconds. 
+

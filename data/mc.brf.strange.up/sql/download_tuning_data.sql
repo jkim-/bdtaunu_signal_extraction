@@ -42,9 +42,14 @@ SELECT
    continuum_logre_density_weight * 
    continuum_logre_normalization_weight) AS w,
   b1_brf_mode,
-  b2_brf_mode
+  b2_brf_mode,
+  grouped_dss_evttype AS evttype
 FROM 
-  test_features INNER JOIN event_weights_generic_augmented USING (eid)
+  (test_features INNER JOIN event_weights_generic_augmented USING (eid)) AS Q
+  INNER JOIN
+  event_labels_generic_augmented
+  USING (eid);
+
 ;
 
 \copy (SELECT * FROM test_sample) TO 'tuning.aux.csv' WITH DELIMITER ' ';
