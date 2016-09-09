@@ -26,8 +26,8 @@ if __name__ == '__main__':
                         help='Integer index for the event type. ')
     parser.add_argument('--undersample', type=float, default=1.0,
                         help='Database name. ')
-    parser.add_argument('--brf_weight_variations_fname', 
-                        default='brf_weight_variations.dat',
+    parser.add_argument('--brf_weight_varied_fname', 
+                        default='brf_weight_varied.dat',
                         help='Branching fraction weight variations '
                              'configuration file name. ')
     parser.add_argument('--dbname', default='bdtaunuhad_lite',
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     start = time.time()
 
-    brf_table = BrfWeightTable(args.brf_weight_variations_fname)
+    brf_table = BrfWeightTable(args.brf_weight_varied_fname)
 
     train_fname = 'evttype{0}.train.csv'.format(args.evttype)
     aux_fname = 'evttype{0}.aux.csv'.format(args.evttype)

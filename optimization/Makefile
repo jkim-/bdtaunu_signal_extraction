@@ -12,12 +12,13 @@ CUDA_LIBS = $(CUDA_ROOT)/lib64
 BOOST_ROOT = /usr/local/boost_1_59_0
 BOOST_LIBS = $(BOOST_ROOT)/stage/lib
 
-BBRCITKDE_ROOT = /home/dchao/workspace/bbrcit_kde
+#BBRCITKDE_ROOT = /home/dchao/workspace/bbrcit_kde
+BBRCITKDE_ROOT = /home/jkim/Analysis/bbrcit_kde
 
-SIGNAL_EXTRACTION_ROOT = /home/dchao/workspace/bdtaunu_signal_extraction
+SIGNAL_EXTRACTION_ROOT = /home/jkim/Analysis/bdtaunu_signal_extraction
 SIGNAL_EXTRACTION_UTILS_LIBS = $(SIGNAL_EXTRACTION_ROOT)/utils/lib
 
-CUSTOM_PYTHON_UTILITIES = /home/dchao/workspace/custom_python_utilities
+CUSTOM_PYTHON_UTILITIES = /home/jkim/Analysis/custom_python_utilities
 
 INCFLAGS = -I$(BBRCITKDE_ROOT)/include -I$(BOOST_ROOT) \
 					 -I$(SIGNAL_EXTRACTION_ROOT)

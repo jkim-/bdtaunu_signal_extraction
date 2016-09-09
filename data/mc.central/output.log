@@ -1,0 +1,63 @@
++ configurations: 
+
+  evttype = 1
+  undersample = 1.0
+  dbname = bdtaunuhad_lite
+
++ downloading...
+  done. completed in 5.7 seconds. 
+
++ configurations: 
+
+  evttype = 2
+  undersample = 1.0
+  dbname = bdtaunuhad_lite
+
++ downloading...
+  done. completed in 19.06 seconds. 
+
++ configurations: 
+
+  evttype = 3
+  undersample = 0.55
+  dbname = bdtaunuhad_lite
+
++ downloading...
+  done. completed in 48.24 seconds. 
+
++ configurations: 
+
+  evttype = 4
+  undersample = 0.14
+  dbname = bdtaunuhad_lite
+
++ downloading...
+  done. completed in 52.8 seconds. 
+
++ configurations: 
+
+  evttype = 5
+  undersample = 0.16
+  dbname = bdtaunuhad_lite
+
++ downloading...
+  done. completed in 51.41 seconds. 
+
++ configurations: 
+
+  dbname = bdtaunuhad_lite
+  sample type: tuning
+    => query script = sql/download_tuning_data.sql
+
++ downloading...
+  done. completed in 73.31 seconds. 
+
++ configurations: 
+
+  dbname = bdtaunuhad_lite
+  sample type: test
+    => query script = sql/download_test_data.sql
+
++ downloading...
+  done. completed in 74.85 seconds. 
+

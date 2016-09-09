@@ -33,19 +33,34 @@ WHERE
   
 CREATE INDEX ON test_features (eid);
 
--- 3. Join records with the weights
-CREATE TEMPORARY VIEW test_sample AS
+-- 3. Join records with the weights and labels
+CREATE TEMPORARY TABLE test_sample AS
 SELECT 
   z1, 
   z2, 
   (brf_correction_weight * 
    cln_weight * llswb1_weight * 
-   continuum_logre_density_weight * continuum_logre_normalization_weight) AS w
+   continuum_logre_density_weight * continuum_logre_normalization_weight) AS w,
+  grouped_dss_evttype AS evttype
 FROM 
-  test_features INNER JOIN event_weights_generic_augmented USING (eid)
+  (test_features INNER JOIN event_weights_generic_augmented USING (eid)) AS Q
+  INNER JOIN
+  event_labels_generic_augmented USING (eid)
+
 ;
 
-\copy (SELECT * FROM test_sample) TO 'test.csv' WITH DELIMITER ' ';
+
+-- 4. Tally the proportions
+SELECT
+  evttype, 
+  SUM(w), 
+  SUM(w) / (SELECT SUM(w) FROM test_sample) AS p
+FROM test_sample
+GROUP BY evttype
+ORDER BY evttype;
+
+-- 5. Download to CSV
+\copy (SELECT z1, z2, w FROM test_sample) TO 'test.csv' WITH DELIMITER ' ';
 
 
 COMMIT;
