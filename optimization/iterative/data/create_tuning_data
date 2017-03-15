@@ -1,0 +1,1 @@
+python combine_data.py '[[1],[2]]' '[0.03, 0.97]' -o 3.97.csv -n 3000
